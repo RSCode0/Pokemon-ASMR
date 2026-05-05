@@ -3,9 +3,9 @@ import pygame
 from entities import Entity
 
 class Player(Entity):
-  def __init__(self, spritesheet, cols, rows, keys):
+  def __init__(self, spritesheet: str, cols: int, rows: int, keys: list[int]):
     super().__init__(spritesheet, cols, rows)
-    self.keys = keys
+    self.keys: list[int] = keys
     
   def update(self):
     self.check_move()

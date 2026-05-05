@@ -2,17 +2,19 @@ import pyscroll
 import pytmx
 import pygame
 
+from player import Player
+
 class Map:
   def __init__(self, display_surface):
     self.display_surface: pygame.Surface = display_surface
-    self.dt = 0
+    self.dt: int | float = 0
     self.tmx_data: pytmx.TiledMap = None
     self.map_data: pyscroll.TiledMapData = None
     self.map_layer: pyscroll.BufferedRenderer = None
     self.group: pyscroll.PyscrollGroup = None
     self.load_map("map_0")
     
-    self.player = None
+    self.player: Player | None = None
   
   def update(self):
     self.group.center(self.player.rect.center)
@@ -20,7 +22,7 @@ class Map:
     self.group.draw(self.display_surface)
     self.player.dt = self.dt
       
-  def load_map(self, map):
+  def load_map(self, map: str):
     self.tmx_data = pytmx.load_pygame(f"venv/assets/map/{map}.tmx")
     self.map_data = pyscroll.TiledMapData(self.tmx_data)
     self.map_layer = pyscroll.BufferedRenderer(self.map_data, self.display_surface.get_size())
@@ -30,6 +32,6 @@ class Map:
   def zoom_map(self):
     self.map_layer.zoom = 3
   
-  def add_player(self, player):
+  def add_player(self, player: Player):
     self.player = player
     self.group.add(self.player)

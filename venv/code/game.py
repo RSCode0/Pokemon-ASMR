@@ -12,9 +12,9 @@ class Game:
     self.dt = 0
     self.framerate: int = 60
     self.running: bool = True
-    self.keys = []
+    self.keys: list[int] = []
     
-    self.player = Player("ash_walk", 4, 4, self.keys)
+    self.player: Player = Player("ash_walk", 4, 4, self.keys)
     
     self.map: Map = Map(self.display_surface)
     self.map.add_player(self.player)
