@@ -15,22 +15,39 @@ class Entity(pygame.sprite.Sprite):
     self.all_images: dict[list: pygame.Surface] = self.get_all_images()
     self.rect: pygame.Rect = self.image.get_rect()
     self.dt: int | float = 0
+    
+    self.collisions: list[pygame.Rect] | None = None
+    self.hitbox: pygame.Rect = pygame.rect.Rect((0, 0, self.frame_width, self.frame_height // 2))
+    
+  
+  def update(self):
+    self.hitbox.midbottom = self.rect.midbottom
   
   def move_right(self):
-    self.rect.x += 1
+    self.hitbox.x += 1
     self.animation("right")
   
   def move_left(self):
-    self.rect.x -= 1
+    self.hitbox.x -= 1
     self.animation("left")
     
   def move_up(self):
-    self.rect.y -= 1
+    self.hitbox.y -= 1
     self.animation("up")
     
   def move_down(self):
-    self.rect.y += 1
+    self.hitbox.y += 1
     self.animation("down")
+    
+  def check_collision(self):
+    if not self.collisions:
+      return False
+    
+    for collision in self.collisions:
+      if self.hitbox.colliderect(collision):
+        return True
+      
+    return False
   
   def animation(self, direction: str):
     self.frame_index += 7 * self.dt

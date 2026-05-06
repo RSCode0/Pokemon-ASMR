@@ -12,6 +12,10 @@ class Map:
     self.map_data: pyscroll.TiledMapData = None
     self.map_layer: pyscroll.BufferedRenderer = None
     self.group: pyscroll.PyscrollGroup = None
+    
+    self.collisions: list[pygame.Rect] = []
+    self.player_spawn: list[int | None, int | None] = []
+    
     self.load_map("map_0")
     
     self.player: Player | None = None
@@ -24,6 +28,8 @@ class Map:
       
   def load_map(self, map: str):
     self.tmx_data = pytmx.load_pygame(f"venv/assets/map/{map}.tmx")
+    self.get_collisions()
+    self.get_spawn()
     self.map_data = pyscroll.TiledMapData(self.tmx_data)
     self.map_layer = pyscroll.BufferedRenderer(self.map_data, self.display_surface.get_size())
     self.zoom_map()
@@ -35,3 +41,15 @@ class Map:
   def add_player(self, player: Player):
     self.player = player
     self.group.add(self.player)
+    self.player.collisions = self.collisions
+    self.player.rect.center = self.player_spawn
+  
+  def get_collisions(self):
+    for obj in self.tmx_data.objects:
+      if obj.name == "collision":
+        self.collisions.append(pygame.rect.Rect((obj.x, obj.y, obj.width, obj.height)))
+    
+  def get_spawn(self):
+    for obj in self.tmx_data.objects:
+      if obj.name == "player_spawn":
+        self.player_spawn = [obj.x, obj.y]
