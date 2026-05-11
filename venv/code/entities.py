@@ -4,7 +4,8 @@ class Entity(pygame.sprite.Sprite):
   def __init__(self, spritesheet: str, cols: int, rows: int):
     super().__init__()
     self.spritesheet: pygame.Surface = pygame.image.load(f"venv/assets/sprite/{spritesheet}.png").convert_alpha()
-    self.spritesheet: pygame.Surface = pygame.transform.scale_by(self.spritesheet, 0.5)
+    if self.spritesheet.get_size()[0] > 150:
+      self.spritesheet: pygame.Surface = pygame.transform.scale_by(self.spritesheet, 0.5)
     self.width, self.height = self.spritesheet.get_size()
     self.cols: int = cols
     self.rows: int = rows

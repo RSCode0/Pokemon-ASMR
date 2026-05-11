@@ -1,0 +1,35 @@
+{
+  "professor": {
+    "intro": [
+      { "speakers": ["professor", "Player"] },
+      { "speaker": "professor", "text": "Hello, how can I help you?" },
+      { "speaker": "Player", "text": "Hello, I'm here to become the best trainer in this town." },
+      { "speaker": "professor", "text": "I see, I see..." },
+      { "speaker": "Player", "text": "I would like to know if you could help me on this quest?" },
+      { "speaker": "professor", "text": "Of course, but first, what is your name?" },
+      { "speaker": "Player", "text": "My name is Sacha, and yours?" },
+      { "speaker": "professor", "text": "My name is Chen. To help you on this quest, I offer you a small gift (x30 Poké Balls)" },
+      { "speaker": "Player", "text": "Thank you, but where can I find my first Pokémon?" },
+      { "speaker": "professor", "text": "To the east of here, there is a portal that will take you into the Pokémon world." },
+      { "speaker": "Player", "text": "Alright, thanks for the information." },
+      { "speaker": "professor", "text": "But I have something even better to offer you!" },
+      { "speaker": "Player", "text": "Really? What is it?" },
+      { "speaker": "professor", "text": "I'll let you choose one of these Pokémon!" },
+      { "speaker": "Player", "text": "Ohh, I'm going to choose Pikachu! Thank you for this gift!" }
+    ],
+    "condition 1": {
+      "condition": "HAVE 1 pokeball",
+      "response": [
+        {
+          "speaker": "professor",
+          "text": "You can go to the farmland east of the map to find Pokémon."
+        }
+      ]
+    },
+    "firstPokemon": [
+      { "speakers": ["professor", "Player"] },
+      { "speaker": "professor", "text": "Hello, how have things been since the last time?" },
+      { "speaker": "Player", "text": "Very good, thanks for the Poké Balls!" }
+    ]
+  }
+}

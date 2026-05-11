@@ -16,7 +16,7 @@ class Game:
     
     self.player: Player = Player("ash_walk", 4, 4, self.keys)
     
-    self.map: Map = Map(self.display_surface)
+    self.map: Map = Map(self.display_surface, self.keys)
     self.map.add_player(self.player)
   
   def run(self):
@@ -32,6 +32,8 @@ class Game:
       if event.type == pygame.QUIT:
         self.running = False
       elif event.type == pygame.KEYDOWN:
-        self.keys.append(event.key)
+        if not event.key in self.keys:
+          self.keys.append(event.key)
       elif event.type == pygame.KEYUP:
-        self.keys.remove(event.key)
+        if event.key in self.keys:
+          self.keys.remove(event.key)

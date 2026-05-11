@@ -3,10 +3,12 @@ import pytmx
 import pygame
 
 from player import Player
+from npc import NPC
 
 class Map:
-  def __init__(self, display_surface):
+  def __init__(self, display_surface, keys):
     self.display_surface: pygame.Surface = display_surface
+    self.keys = keys
     self.dt: int | float = 0
     self.map = "map_0"
     self.tmx_data: pytmx.TiledMap = None
@@ -17,6 +19,7 @@ class Map:
     self.collisions: list[pygame.Rect] = []
     self.player_spawn: list[int | None, int | None] = []
     self.tps = []
+    self.npcs: dict[NPC] = {}
     
     self.player: Player | None = None
     
@@ -27,6 +30,7 @@ class Map:
     self.group.update()
     self.group.draw(self.display_surface)
     self.player.dt = self.dt
+    self.npc_hit()
     self.check_tp()
       
   def load_map(self, map: str):
@@ -39,6 +43,7 @@ class Map:
     self.map_layer = pyscroll.BufferedRenderer(self.map_data, self.display_surface.get_size())
     self.zoom_map()
     self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=4)
+    self.add_npcs()
     if self.player:
       self.add_player(self.player)
   
@@ -83,3 +88,19 @@ class Map:
     for tp in self.tps:
       if self.player.rect.colliderect(tp["rect"]):
         self.load_map(tp["name"])
+  
+  def add_npcs(self):
+    for obj in self.tmx_data.objects:
+      if str(obj.name).startswith("npc"):
+        npc_name = str(obj.name).split(" ")[1]
+        self.npcs[npc_name] = NPC(f"npc/{npc_name}_{self.map}", 4, 4, npc_name)
+        self.collisions.append(self.npcs[npc_name].hitbox)
+        self.group.add(self.npcs[npc_name], layer=1)
+        self.npcs[npc_name].rect.center = [obj.x, obj.y]
+  
+  def npc_hit(self):
+    for npc in self.npcs:
+      if self.npcs[npc].rect.colliderect(self.player.rect):
+        self.npcs[npc].active_dialogue(self.keys, self.display_surface)
+      elif self.npcs[npc].dialogue_active:
+        self.npcs[npc].dialogue_active = False
